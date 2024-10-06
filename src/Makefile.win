@@ -1,0 +1,79 @@
+# Project: Projet1
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = main.o gameSetup.o common/objloader.o common/skybox.o common/vector.o common/car.o common/decor.o common/camera.o common/robot.o common/collision.o common/collisionplane.o common/collisionsphere.o common/texture.o common/ocean.o common/gestionVehicules.o common/menu.o common/particule.o common/blurEffect.o
+LINKOBJ  = main.o gameSetup.o common/objloader.o common/skybox.o common/vector.o common/car.o common/decor.o common/camera.o common/robot.o common/collision.o common/collisionplane.o common/collisionsphere.o common/texture.o common/ocean.o common/gestionVehicules.o common/menu.o common/particule.o common/blurEffect.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib32" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -lopengl32 -lGLU32 ../../../../../../../library/freeglut/lib/freeglut.lib -m32
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = Projet1.exe
+CXXFLAGS = $(CXXINCS) -m32
+CFLAGS   = $(INCS) -m32
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+gameSetup.o: gameSetup.cpp
+	$(CPP) -c gameSetup.cpp -o gameSetup.o $(CXXFLAGS)
+
+common/objloader.o: common/objloader.cpp
+	$(CPP) -c common/objloader.cpp -o common/objloader.o $(CXXFLAGS)
+
+common/skybox.o: common/skybox.cpp
+	$(CPP) -c common/skybox.cpp -o common/skybox.o $(CXXFLAGS)
+
+common/vector.o: common/vector.cpp
+	$(CPP) -c common/vector.cpp -o common/vector.o $(CXXFLAGS)
+
+common/car.o: common/car.cpp
+	$(CPP) -c common/car.cpp -o common/car.o $(CXXFLAGS)
+
+common/decor.o: common/decor.cpp
+	$(CPP) -c common/decor.cpp -o common/decor.o $(CXXFLAGS)
+
+common/camera.o: common/camera.cpp
+	$(CPP) -c common/camera.cpp -o common/camera.o $(CXXFLAGS)
+
+common/robot.o: common/robot.cpp
+	$(CPP) -c common/robot.cpp -o common/robot.o $(CXXFLAGS)
+
+common/collision.o: common/collision.cpp
+	$(CPP) -c common/collision.cpp -o common/collision.o $(CXXFLAGS)
+
+common/collisionplane.o: common/collisionplane.cpp
+	$(CPP) -c common/collisionplane.cpp -o common/collisionplane.o $(CXXFLAGS)
+
+common/collisionsphere.o: common/collisionsphere.cpp
+	$(CPP) -c common/collisionsphere.cpp -o common/collisionsphere.o $(CXXFLAGS)
+
+common/texture.o: common/texture.cpp
+	$(CPP) -c common/texture.cpp -o common/texture.o $(CXXFLAGS)
+
+common/ocean.o: common/ocean.cpp
+	$(CPP) -c common/ocean.cpp -o common/ocean.o $(CXXFLAGS)
+
+common/gestionVehicules.o: common/gestionVehicules.cpp
+	$(CPP) -c common/gestionVehicules.cpp -o common/gestionVehicules.o $(CXXFLAGS)
+
+common/menu.o: common/menu.cpp
+	$(CPP) -c common/menu.cpp -o common/menu.o $(CXXFLAGS)
+
+common/particule.o: common/particule.cpp
+	$(CPP) -c common/particule.cpp -o common/particule.o $(CXXFLAGS)
+
+common/blurEffect.o: common/blurEffect.cpp
+	$(CPP) -c common/blurEffect.cpp -o common/blurEffect.o $(CXXFLAGS)
