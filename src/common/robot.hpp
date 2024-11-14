@@ -33,6 +33,7 @@ class robot
 		void keyboard(unsigned char key, int x, int y);
 		void keyboardUP(unsigned char key, int x, int y);
 		void handleJump();
+		void setLocationInc(vector3d loc);
 		void updateCollision(std::vector<collisionplane>& collplane);
 		void updateCollisionMurs(std::vector<collisionplane>& collplane,robot* rb,vehicule* voiture);
 		void setLocation(vector3d location);

@@ -6,6 +6,8 @@ decor::decor(const char* c,unsigned int map , std::vector<collisionplane>& cplan
 	spawnpoints=sp;
 	name=c;
 	mesh=map;
+	modePlein=true;
+	modeLines=false;
 	
 }
 decor::~decor()
@@ -19,8 +21,21 @@ void decor::update()
 void decor::draw()
 {
 	glPushMatrix();	
+	if(modeLines)
+	  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if(modePlein)
+	  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glCallList(mesh);
 	glPopMatrix();
+}
+
+void decor::isModePlein(bool s)
+{
+	 modePlein=s;
+}
+void decor::isModeLines(bool s)
+{
+	 modeLines=s;
 }
 
 std::vector<collisionplane>& decor::getCollisionPlanes()

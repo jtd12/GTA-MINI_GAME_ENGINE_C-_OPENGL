@@ -22,7 +22,7 @@ setup::setup()
 	gestion=new gestionVehicules();
 	sky=new skybox();
 	cam=new camera();
-	rb=new robot(collisionsphere(vector3d(-70,15.0,0),8.0f));
+	rb=new robot(collisionsphere(vector3d(-70,0.0,0),8.0f));
 
 
 	for(int i=0;i<4;i++)
@@ -30,7 +30,7 @@ setup::setup()
 	 
 	for(int i=0;i<water.size();i++)
 	 water[i]->loadTexture("data/water.bmp");
-	 
+	
 	 
 	 blur=new blurMotion();
 	 
@@ -94,6 +94,7 @@ void setup::specialKeyUP(int key, int x, int y)
 
 void setup::update()
 {
+	changeRenderMode();
 	gestion->update(levels);
 	gestion->collisions();
 	rb->collisions(rb,gestion->v[0],levels[3]->getCollisionPlanes());
@@ -109,6 +110,34 @@ void setup::update()
  	gestion->removeCloseVehicles(*rb,150);
  	gestion->restoreVehiclesFarFrom(*rb,150);
 
+}
+
+void setup::changeRenderMode()
+{
+	if(mm.value==3)
+	{
+		levels[0]->isModePlein(true);
+		levels[0]->isModeLines(false);
+		for(int i=0;i<gestion->v.size();i++)
+		{
+		gestion->v[i]->isModePlein(true);
+		gestion->v[i]->isModeLines(false);
+		}
+	
+
+	}
+	if(mm.value==4)
+	{
+		levels[0]->isModePlein(false);
+		levels[0]->isModeLines(true);
+		for(int i=0;i<gestion->v.size();i++)
+		{
+		gestion->v[i]->isModePlein(false);
+		gestion->v[i]->isModeLines(true);
+		}
+	
+		
+	}
 }
 
 void setup::timer(int value) {

@@ -181,6 +181,7 @@ class vehicule
 		void updateCollision(std::vector<collisionplane>& collplane);
 		void updateCollisionMurs(std::vector<collisionplane>& collplane);
 		void setLocation(vector3d location);
+		void setLocationInc(vector3d loc);
 		void setPosition(vector3d pos);
 		bool getControl();
 		void setControl(bool c);
@@ -190,7 +191,8 @@ class vehicule
 		float getSpeed();
 		bool getAvancer();
 		bool getReculer();
-		
+		void isModePlein(bool s);
+		void isModeLines(bool s); 
 		
 	private:
 
@@ -237,6 +239,8 @@ class vehicule
 	vec vecteur;
 	bool isVisible;
 	float regularSpeed;
+	bool modePlein;
+	bool modeLines;
 
 	
 

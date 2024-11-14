@@ -17,13 +17,13 @@ for(int i=0;i<v.size();i++)
 
 void gestionVehicules::init()
 {
-v.push_back(new vehicule(collisionsphere(vector3d(40,12.0,0),12.0f),vector3d(1.25f,1.25f,1.25f),"data/vehicule/camionnete.obj",true));
+v.push_back(new vehicule(collisionsphere(vector3d(40,0.2,0),12.0f),vector3d(1.25f,1.25f,1.25f),"data/vehicule/camionnete.obj",true));
 
-for(int i=0;i<10;i++)
-v.push_back(new vehicule(collisionsphere(vector3d(350+(i*250),12.0,0),10.0f),vector3d(0.5f,0.5f,0.5f),"data/vehicule/vehicule0.obj",false));
+for(int i=0;i<12;i++)
+v.push_back(new vehicule(collisionsphere(vector3d(350+(i*250),0.0,0),10.0f),vector3d(0.5f,0.5f,0.5f),"data/vehicule/vehicule0.obj",false));
 
-for(int i=0;i<10;i++)
-v.push_back(new vehicule(collisionsphere(vector3d(250+(i*250),12.0,150),10.0f),vector3d(0.5f,0.5f,0.5f),"data/vehicule/vehicule1.obj",false));
+for(int i=0;i<12;i++)
+v.push_back(new vehicule(collisionsphere(vector3d(250+(i*250),0.0,150),10.0f),vector3d(0.5f,0.5f,0.5f),"data/vehicule/vehicule1.obj",false));
 
 }
 

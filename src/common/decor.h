@@ -17,12 +17,16 @@ class decor
 		std::string& getName();
   		void change(const char* c,unsigned int map , std::vector<collisionplane>& cplane, std::vector<vector3d>& sp);
  		std::vector<vector3d>& getSpawnPoints();
+		void isModePlein(bool s);
+		void isModeLines(bool s);  
 		
 	private:
 		int mesh;
 		std::vector<collisionplane> cp;
 		std::vector<vector3d> spawnpoints;
 		std::string name;
+		bool modePlein;
+		bool modeLines;
 	
 };
 #endif

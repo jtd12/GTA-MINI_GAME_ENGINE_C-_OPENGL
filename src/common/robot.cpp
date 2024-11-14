@@ -72,6 +72,9 @@ void robot::updateCollision(std::vector<collisionplane>& collplane)
         // Update the robot's position based on its velocity
         newPos.y += robotYVelocity;
     }
+    
+    
+		
 			
 				 if(getLocation().y<newPos.y)
 				 {
@@ -122,6 +125,11 @@ void robot::updateCollisionMurs(std::vector<collisionplane>& collplane,robot* rb
 }
 
 	
+	void robot::setLocationInc(vector3d loc)
+{
+	cs.center.y+=loc.y;
+}
+
 bool robot::collisionAABB( robot& rb,  vehicule& voiture) {
     return (rb.getLocation().x < voiture.getLocation().x + voiture.getScale().x+10 &&
             rb.getLocation().x + rb.getScale().x+30 > voiture.getLocation().x &&
@@ -132,6 +140,12 @@ bool robot::collisionAABB( robot& rb,  vehicule& voiture) {
             
 void robot::collisions(robot *rb,vehicule *voiture,std::vector<collisionplane>& collplane)
 {
+		if(getLocation().y<-1)
+				{
+					setLocationInc(vector3d(0,1.1f,0));
+				}
+				
+				
 	if (collisionAABB(*rb, *voiture))
 	{
 		rb->speed=-7.0f;
@@ -150,6 +164,7 @@ void robot::collisions(robot *rb,vehicule *voiture,std::vector<collisionplane>& 
 			
 			}
 		}
+		
 	}
 	
 }
@@ -228,6 +243,7 @@ void robot::drawRobot(vehicule * car) {
 
 	if(car->getControl()==false)
 	{
+	
 	glTranslated(cs.center.x,cs.center.y,cs.center.z);
 	glRotated(rotation,0,1.0,0);
 	glScaled(scale.x,scale.y,scale.z);
@@ -291,14 +307,14 @@ void robot::updateMovement(int value,bool control,blurMotion* motionBB)
 	if(up)
 	{
 		motionBB->update(1000);
-		walkSpeed=1.9f;
+		walkSpeed=2.9f;
 		update(value,20.0f);
 	}
 
 	
 	if(down)
 	{
-		walkSpeed=-1.9f;
+		walkSpeed=-2.9f;
 		update(value,-20.0f);
 		motionBB->update(1000);
 	}
@@ -306,11 +322,11 @@ void robot::updateMovement(int value,bool control,blurMotion* motionBB)
 	
 	if(right)
 	{
-		rotation-=2.8f;
+		rotation-=10.0f;
 	}
 	if(left)
 	{
-		rotation+=2.8f;
+		rotation+=10.0f;
 	}
 	
 		if(space)

@@ -256,6 +256,8 @@ vehicule::vehicule(collisionsphere ccs,vector3d s,const char * filename,bool vis
 	rollAngle=0.0f;
 	control=false;
 	isVisible=visible;
+	modePlein=true;
+	modeLines=false;
 	bb.push_back(new boundingboxCar(vector3d(-30,1.0,0)));
 	bb.push_back(new boundingboxCar(vector3d(30,1.0,0)));
 	regularSpeed=1.0f;
@@ -426,6 +428,11 @@ void vehicule::collisions(std::vector<vehicule*> cc)
   void vehicule::setLocation(vector3d location)
 {
 	cs.center.change(location);
+}
+
+void vehicule::setLocationInc(vector3d loc)
+{
+	cs.center+=loc;
 }
 
   void vehicule::setPosition(vector3d pos)
@@ -654,6 +661,10 @@ void vehicule::updateCollision(std::vector<collisionplane>& collplane)
 					
 				}
 				
+				if(getLocation().y<-1)
+				{
+					setLocationInc(vector3d(getLocation().x,2,getLocation().z));
+				}
 				
 				 if(getLocation().y<newPos.y)
 				  isground=true;
@@ -664,10 +675,22 @@ void vehicule::updateCollision(std::vector<collisionplane>& collplane)
 }
 
 
+void vehicule::isModePlein(bool s)
+{
+	 modePlein=s;
+}
+void vehicule::isModeLines(bool s)
+{
+	 modeLines=s;
+}
+
 
 void vehicule::draw()
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	if(modeLines)
+	  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if(modePlein)
+	  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glTranslatef(cs.center.x, (suspensionHeight[0] - suspensionHeight[2])+cs.center.y, cs.center.z);
 	glRotatef(pitchAngle, 1.0f, 0.0f, 0.0f);  // Pitch (tilt forward/backward)
     glRotatef(rollAngle, 0.0f, 0.0f, 1.0f);   // Roll (tilt side-to-side)	

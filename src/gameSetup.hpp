@@ -28,6 +28,7 @@ class setup
 	void mouseState(int button, int state, int x, int y);
 	void update();
 	void draw(int w,int h);
+	void changeRenderMode();
 	void specialKeyUP(int key, int x, int y);
 	void drawHud();
 	void hud();
@@ -47,6 +48,7 @@ class setup
 	vector3d posBlur;
 	textures texture;
 	GLuint hudTex;
+
 };
 
 #endif
