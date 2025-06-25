@@ -1,0 +1,12 @@
+# Blender v2.78 (sub 0) OBJ File: 'project.blend'
+# www.blender.org
+mtllib map7collision.mtl
+o Plane.002_Plane.003
+v -9.605073 -0.115426 9.914016
+v 10.675326 -0.115426 9.914016
+v -9.605073 -0.115426 -10.366384
+v 10.675326 -0.115426 -10.366384
+vn 0.0000 1.0000 0.0000
+usemtl collision
+s off
+f 1//1 2//1 4//1 3//1
