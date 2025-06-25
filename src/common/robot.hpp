@@ -22,6 +22,7 @@ class robot
 		void drawLeg(float side);
 		void updateMovement(int value, bool control,blurMotion* motionBB);
 		void update(int value,int a);
+		void detectCollisionVoitures(robot* rb,vehicule* voiture);
 		void handleKeyPress(unsigned int key, int x, int y);
 		void handleKeyPressUP(unsigned int key, int x, int y);
 		void resetMovement(int a);
@@ -38,6 +39,7 @@ class robot
 		void updateCollisionMurs(std::vector<collisionplane>& collplane,robot* rb,vehicule* voiture);
 		void setLocation(vector3d location);
 		void setPosition(vector3d pos);
+		void handleCollision(vector3d robotPos,  vector3d robotDirection, float stepBackDistance);
 		vector3d getScale();
 
 		
@@ -70,6 +72,7 @@ class robot
 		vector3d scale;
 		float speed;
 		bool collid;
+		float vx,vz;
 		
 	
 	

@@ -90,8 +90,21 @@ void robot::updateCollision(std::vector<collisionplane>& collplane)
 				setPosition(newPos);
 }
 
+void robot::handleCollision(vector3d robotPos,  vector3d robotDirection, float stepBackDistance) {
+    robotDirection.x = -robotDirection.x;
+    robotDirection.y = -robotDirection.y;
+    robotDirection.z = -robotDirection.z;
+    robotPos += robotDirection * stepBackDistance;
+}
+
+
 void robot::updateCollisionMurs(std::vector<collisionplane>& collplane,robot* rb,vehicule* voiture)
 {
+
+				
+	vector3d direction=vector3d(vx,0,vz);
+				
+
 
 			
 			
@@ -103,8 +116,18 @@ void robot::updateCollisionMurs(std::vector<collisionplane>& collplane,robot* rb
 				if(collision::sphereplane(newPos,collplane[i].normal,collplane[i].p[0],collplane[i].p[1],collplane[i].p[2],collplane[i].p[3],cs.r))
 				{
 					
-			
-					  speed=-7.0f;
+				  //robotYVelocity = 0.0f;  // Apply jump force
+        		  //isJumping = false;    
+					   rb->cs.center.x -= vx * speed;
+    				   rb->cs.center.z -= vz * speed;
+					 rb->up=false;
+					 rb->down=false;
+					 rb->right=false;
+					rb-> left=false;
+					rb-> space=false;
+					rb-> sprintKey=false;
+					 
+				 // sprintSpeed=0.002f;
 			  	
 					
 				
@@ -145,11 +168,6 @@ void robot::collisions(robot *rb,vehicule *voiture,std::vector<collisionplane>& 
 					setLocationInc(vector3d(0,1.1f,0));
 				}
 				
-				
-	if (collisionAABB(*rb, *voiture))
-	{
-		rb->speed=-7.0f;
-	}
 	else
 	{
 		for(int i=0;i<collplane.size();i++)
@@ -158,8 +176,11 @@ void robot::collisions(robot *rb,vehicule *voiture,std::vector<collisionplane>& 
 			if(collision::sphereplane(cs.center,collplane[i].normal,collplane[i].p[0],collplane[i].p[1],collplane[i].p[2],collplane[i].p[3],cs.r)==false)
 			{
 		
-					  rb->speed=0.7f;
-				  
+					rb->speed=1.0f;
+					
+					if(sprintKey){
+				      sprintSpeed=2.5f;
+				  }
 			
 			
 			}
@@ -281,13 +302,33 @@ void robot::update(int value,int a) {
     
 
     
-    float  vz = walkSpeed * sprintSpeed * cos(rotation * 3.14159 / 180.0f);
-    float vx = walkSpeed * sprintSpeed * sin(rotation * 3.14159 / 180.0f);
+      vz = walkSpeed * sprintSpeed * cos(rotation * 3.14159 / 180.0f);
+      vx = walkSpeed * sprintSpeed * sin(rotation * 3.14159 / 180.0f);
     
     cs.center.x += vx * speed;
     cs.center.z += vz * speed;
+    
+  
 }
 
+void robot::detectCollisionVoitures(robot* rb,vehicule* voiture)
+{
+	  
+    	if (collisionAABB(*rb, *voiture))
+	{
+		 	     
+				    rb->cs.center.x -= vx * speed;
+    				rb->cs.center.z -= vz * speed;
+    				rb-> up=false;
+					rb-> down=false;
+					rb-> right=false;
+					rb-> left=false;
+					rb-> space=false;
+					rb-> sprintKey=false;
+					 
+		
+	}
+}
 
 
 void robot::resetMovement(int a)
@@ -336,7 +377,7 @@ void robot::updateMovement(int value,bool control,blurMotion* motionBB)
 	}
 	if(sprintKey){
 			motionBB->update(2000);
-		sprintSpeed=4.5f;
+		sprintSpeed=2.5f;
 	}
 	
 	if(sprintKey==false)

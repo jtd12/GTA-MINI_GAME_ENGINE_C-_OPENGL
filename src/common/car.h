@@ -14,8 +14,8 @@
 const float CAR_MASS = 2000.0f;
 const float MAX_SPEED = 700;
 const float ACCELERATION = 20.0f;
-const float MAX_BRAKING_FORCE = 1400.0f;
-const float STEERING_ANGLE_MAX = 0.5f;
+const float MAX_BRAKING_FORCE = 700.0f;
+const float STEERING_ANGLE_MAX = 2.5f;
 const float SPRING_CONSTANT = 95000.0f; // N/m
 const float DAMPING_COEFFICIENT = 200.0f; // N*s/m
 const float WHEEL_RADIUS = 0.9f; // m
@@ -53,12 +53,15 @@ public:
 	    float springConstant;
 	    float dampingConstant;
 	    vector3d position;
+	    void setRotation(float rot);
+	    
 	    
 	private:
 	
 		objloader *obj;
 		int roue_;	
 		vector3d loc;
+		float rotation;
 };
 
 
@@ -146,9 +149,11 @@ class boundingboxCar
 		void drawCollision();
 		vector3d getLocation();
 		void setLocation(vector3d loc);
+		void setParent(vector3d parent,float rotationY,int offset);
 	private:
 	
 		vector3d pos;
+		float rot;
 };
 
 
@@ -193,13 +198,14 @@ class vehicule
 		bool getReculer();
 		void isModePlein(bool s);
 		void isModeLines(bool s); 
+		bool getIsVisible();
+		std::vector<boundingboxCar*> bb;
 		
 	private:
 
 	int car;
 	std::vector<porte *> door;
 	std::vector<roue *> wheel;
-	std::vector<boundingboxCar*> bb;
 		std::vector<particules> part;
 	objloader *obj;
 	vitres *v;
@@ -241,6 +247,7 @@ class vehicule
 	float regularSpeed;
 	bool modePlein;
 	bool modeLines;
+
 
 	
 

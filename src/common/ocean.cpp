@@ -4,6 +4,8 @@ ocean::ocean()
 {
 	tex=new textures();
 	GenerateInitGrid();
+	modePlein=true;
+	modeLines=false;
 }
 ocean::~ocean()
 {
@@ -55,11 +57,24 @@ void ocean::loadTexture(const char* filename)
 	texture=tex->loadBMP_custom(filename);
 }
 
+void ocean::isModePlein(bool s)
+{
+	 modePlein=s;
+}
+void ocean::isModeLines(bool s)
+{
+	 modeLines=s;
+}
+
 void ocean::draw()
 {
+
 	glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture);  // Bind the loaded texture
-    
+    if(modeLines)
+	  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if(modePlein)
+	  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glBegin(GL_QUADS);  // Render as quads
     for (int x = 0; x < TAILLE - 1; x++) {
         for (int z = 0; z < TAILLE - 1; z++) {
@@ -76,4 +91,5 @@ void ocean::draw()
     }
     glEnd();
     glDisable(GL_TEXTURE_2D);
+   
 }

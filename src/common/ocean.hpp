@@ -20,6 +20,8 @@ class ocean
 		void updateOceanVertices(float deltaTime);
 		void draw();
 		void loadTexture(const char* filename);
+		void isModePlein(bool s);
+		void isModeLines(bool s); 
 		
 	private:
 		float speed;
@@ -29,6 +31,8 @@ class ocean
 		float textureCoords[TAILLE][TAILLE][2];  // Texture coordinates for each vertex
 		GLuint texture;
 		textures* tex;
+		bool modePlein;
+		bool modeLines;
 };
 
 #endif

@@ -23,7 +23,7 @@ for(int i=0;i<12;i++)
 v.push_back(new vehicule(collisionsphere(vector3d(350+(i*250),0.0,0),10.0f),vector3d(0.5f,0.5f,0.5f),"data/vehicule/vehicule0.obj",false));
 
 for(int i=0;i<12;i++)
-v.push_back(new vehicule(collisionsphere(vector3d(250+(i*250),0.0,150),10.0f),vector3d(0.5f,0.5f,0.5f),"data/vehicule/vehicule1.obj",false));
+v.push_back(new vehicule(collisionsphere(vector3d(290+(i*250),0.0,40),10.0f),vector3d(0.5f,0.5f,0.5f),"data/vehicule/vehicule1.obj",false));
 
 }
 
@@ -98,6 +98,7 @@ void gestionVehicules::collisions()
 void gestionVehicules::update(std::vector<decor *> levels)
 {
 
+	
     for(int i=0;i<v.size();i++)
     {
 	v[i]->updateCollision(levels[1]->getCollisionPlanes());
@@ -123,6 +124,17 @@ void gestionVehicules::draw()
     glPopMatrix();
 }
 
+ for(int j=0;j<v.size();j++)
+	 for(int i=0;i<v[j]->bb.size();i++)
+	 {
+	 glPushMatrix();
+	 if(v[0]->getIsVisible())
+	    v[0]->bb[i]->drawCollision();
+	    
+	 if(v[0]->getIsVisible()==false)
+	    v[j]->bb[i]->drawCollision();
+	 glPopMatrix();
+     }
   
     
 }

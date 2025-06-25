@@ -100,6 +100,8 @@ void setup::update()
 	rb->collisions(rb,gestion->v[0],levels[3]->getCollisionPlanes());
 	rb->updateCollision(levels[1]->getCollisionPlanes());
 	rb->updateCollisionMurs(levels[3]->getCollisionPlanes(),rb,gestion->v[0]);
+	for(int i=0;i<gestion->v.size();i++)
+	 rb->detectCollisionVoitures(rb,gestion->v[i]);
 	sky->update();
 	
 
@@ -118,22 +120,23 @@ void setup::changeRenderMode()
 	{
 		levels[0]->isModePlein(true);
 		levels[0]->isModeLines(false);
-		for(int i=0;i<gestion->v.size();i++)
-		{
-		gestion->v[i]->isModePlein(true);
-		gestion->v[i]->isModeLines(false);
-		}
 	
+		for(int i=0;i<water.size();i++)
+		{
+			water[i]->isModeLines(false);
+			water[i]->isModePlein(true);
+		}
 
 	}
 	if(mm.value==4)
 	{
 		levels[0]->isModePlein(false);
 		levels[0]->isModeLines(true);
-		for(int i=0;i<gestion->v.size();i++)
+		
+		for(int i=0;i<water.size();i++)
 		{
-		gestion->v[i]->isModePlein(false);
-		gestion->v[i]->isModeLines(true);
+			water[i]->isModeLines(true);
+			water[i]->isModePlein(false);
 		}
 	
 		
@@ -201,36 +204,39 @@ void setup::draw(int w,int h)
 	glPopMatrix();
 	glPushMatrix();
 	for(int i=0;i<levels.size();i++)
- 	 levels[i]->draw();
+ 	  levels[i]->draw(); 
 	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslated(0,-70,-4010);
+	glScaled(20,1,20);
+	water[0]->draw();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(-4010,-70,0);
+	glScaled(20,1,20);
+	water[1]->draw();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(0,-70,0);
+	glScaled(20,1,20);
+	water[2]->draw();
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(-4010,-70,-4010);
+	glScaled(20,1,20);
+	water[3]->draw();
+	glPopMatrix();
+	
 	glPushMatrix();
 	gestion->draw();
 	glPopMatrix();
+	
 
 	glPushMatrix();
 	rb->drawRobot(gestion->v[0]);
 	glPopMatrix();
 	
-	glPushMatrix();
-	glTranslated(0,-70,-1010);
-	glScaled(4,1,4);
-	water[0]->draw();
-	glPopMatrix();
-	glPushMatrix();
-	glTranslated(-1010,-70,0);
-	glScaled(4,1,4);
-	water[1]->draw();
-	glPopMatrix();
-	glPushMatrix();
-	glTranslated(0,-70,0);
-	glScaled(4,1,4);
-	water[2]->draw();
-	glPopMatrix();
-	glPushMatrix();
-	glTranslated(-1010,-70,-1010);
-	glScaled(4,1,4);
-	water[3]->draw();
-	glPopMatrix();
 	
 	blur->copySceneToTexture(w,h);
 	drawHud();

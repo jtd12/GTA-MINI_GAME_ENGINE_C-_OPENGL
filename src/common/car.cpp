@@ -9,6 +9,7 @@ roue::roue(const char * filename)
         springConstant = 10000.0f;
         dampingConstant = 1000.0f;
         position = vector3d(0.0f, 0.0f, 0.0f);
+        rotation=0.0f;
 }
 
  void roue::updateSuspension(float verticalForce, float dt) {
@@ -32,6 +33,12 @@ vector3d roue::getLocation()
 {
 	return loc;
 }
+
+void roue::setRotation(float rot)
+{
+	rotation+=rot;
+}
+
 void roue::setLocation(vector3d vec)
 {
 	loc.x=vec.x;
@@ -42,6 +49,7 @@ void roue::draw()
 {
 	glPushMatrix();
 	glTranslated(position.x,position.y,position.z);
+	glRotated(rotation,0.0f,0,0.5f);
 	glCallList(roue_);
 	glPopMatrix();
 }
@@ -183,33 +191,38 @@ void volant::draw()
 
 
 
-
-boundingboxCar::boundingboxCar(vector3d loc)
+boundingboxCar::boundingboxCar(vector3d pos_)
 {
-	pos=loc;
+	pos=pos_;
+}
+
+boundingboxCar::~boundingboxCar()
+{
 	
 }
-		boundingboxCar::~boundingboxCar()
-		{
-			
-		}
-		
-	
-		void boundingboxCar::drawCollision()
-		{
-			glPushMatrix();
-			glTranslated(pos.x,pos.y,pos.z);
-		//	glutSolidCube(20.0f);
-			glPopMatrix();
-		}
-		vector3d boundingboxCar::getLocation()
-		{
-			return pos;
-		}
-		void boundingboxCar::setLocation(vector3d loc)
-		{
-			pos=loc;
-		}
+
+void boundingboxCar::drawCollision()
+{
+	glPushMatrix();
+	glTranslated(pos.x,pos.y,pos.z);
+	glRotated(rot,0,0.5,0);
+	glScaled(1,1,1);
+	glColor3d(0.5,0.4,0.4);
+	glutSolidCube(5);
+	glPopMatrix();
+}
+
+vector3d boundingboxCar::getLocation()
+{
+	return pos;
+}
+
+void boundingboxCar::setParent(vector3d parent,float rotationY,int offset)
+{
+	pos=vector3d(parent.x+cos(rotationY)*offset,parent.y+2,parent.z-sin(rotationY)*offset);
+	rot=rotationY;
+}
+
 		
 vehicule::vehicule(collisionsphere ccs,vector3d s,const char * filename,bool visible)
 {
@@ -236,6 +249,7 @@ vehicule::vehicule(collisionsphere ccs,vector3d s,const char * filename,bool vis
     wheel[2]->setLocation(vector3d(2,cs.center.y-15,-5));
     wheel[3]->setLocation(vector3d(-10,cs.center.y-15,-5));
 	deltaTime = 0.016f; // Assuming 60 FPS
+	brakingForce=0.0f;
 	up=false;
 	down=false;
 	right=false;
@@ -398,10 +412,10 @@ void vehicule::collisions(std::vector<vehicule*> cc)
 	 for (int i = 0; i < cc.size(); i++) {
         for (int j = i + 1; j < cc.size(); j++) {
             if (collisionAABB(*cc[i], *cc[j])) {
-            	 cc[i]-> regularSpeed=-12.0f;
-            	 cc[j]-> regularSpeed=-12.0f;
-            	 cc[i]-> speed-=0.1f;
-  				 cc[j]-> speed-=0.1f;
+            	 	cc[i]->cs.center.x -= vx *.05f;
+            	 	cc[i]->cs.center.z -= vz *.05f;
+            	 	cc[j]->cs.center.x += vx *.05f;
+	        		cc[j]->cs.center.z += vz *.05f;
  
             }
         }
@@ -475,16 +489,17 @@ bool vehicule::getReculer()
 
 void vehicule::updateCollisionMurs(std::vector<collisionplane>& collplane)
 {
-	vector3d newPos(getLocation()+bb[0]->getLocation());
+			vector3d newPos(bb[0]->getLocation());
 			for(int i=0;i<collplane.size();i++)
 			{
 			
 				if(collision::sphereplane(newPos,collplane[i].normal,collplane[i].p[0],collplane[i].p[1],collplane[i].p[2],collplane[i].p[3],cs.r))
 				{
-			regularSpeed=-15.0f;
-			speed-=0.1f;
+			cs.center.x -= vx *.05f;
+	        cs.center.z -= vz *.05f;
 		
-			
+		
+		
 				}
 				
 			
@@ -492,15 +507,15 @@ void vehicule::updateCollisionMurs(std::vector<collisionplane>& collplane)
 			
 			}
 			
-				vector3d newPos2(getLocation()+bb[1]->getLocation());
+			vector3d newPos2(bb[1]->getLocation());
 			for(int i=0;i<collplane.size();i++)
 			{
 			
 				if(collision::sphereplane(newPos2,collplane[i].normal,collplane[i].p[0],collplane[i].p[1],collplane[i].p[2],collplane[i].p[3],cs.r))
 				{
-			regularSpeed=-15.0f;
-			speed-=0.1f;
-		
+			cs.center.x += vx *.05f;
+	        cs.center.z += vz *.05f;
+			
 			
 				}
 				
@@ -518,7 +533,10 @@ void vehicule::update(bool exit,blurMotion* motionBB)
 {
 	float deltaTime = 0.1f;  // Assume a fixed time step for simplicity
 
-
+	
+	bb[0]->setParent(getLocation(),getRotation(),15);
+	bb[1]->setParent(getLocation(),getRotation(),-55);
+	
 	for(int i=0;i<1;i++)
     part[i].updateParticles(deltaTime, getLocation(),space,right,left);  // Mettre à jour les particules
 
@@ -532,11 +550,20 @@ void vehicule::update(bool exit,blurMotion* motionBB)
 	for(int i=0;i<wheel.size();i++)
 	 wheel[i]->update();
 	 
+	 
+	 
 if(control)
 {
 	
 if(modeAvancer)
 {
+	
+if(speed>0.2f)
+{
+  for(int i=0;i<wheel.size();i++)
+	wheel[i]->setRotation(10.9f);
+}
+
 if(up)
 {
 
@@ -551,6 +578,13 @@ if(up)
 
 if(modeReculer)
 {
+
+if(speed>0.2f)
+{
+  for(int i=0;i<wheel.size();i++)
+	wheel[i]->setRotation(-10.9f);
+}
+
 if(up)
 {
 		motionBB->update(2000);
@@ -582,14 +616,14 @@ if(space || exit)
 
 if(up)
 {
-if(right)
+if(right && speed>0.5f)
 {
 	
 	steeringAngle = -STEERING_ANGLE_MAX;
         
 }
 
-else if( left)
+else if( left && speed>0.5f)
 {
 	
 	steeringAngle = STEERING_ANGLE_MAX;
@@ -707,10 +741,7 @@ void vehicule::draw()
 
 void vehicule::elementCars()
 {
-	glPushMatrix();
-	for(int i=0;i<bb.size();i++)
-	bb[i]->drawCollision();
-	glPopMatrix();
+	
 	glPushMatrix();
 		for(int i=0;i<1;i++)
 	part[i].renderParticles();
@@ -764,7 +795,13 @@ void vehicule::elementOtherCars()
         glScaled(WHEEL_RADIUS2,WHEEL_RADIUS2,WHEEL_RADIUS2);
         wheel[i]->draw();
 	glPopMatrix();
+
 	}
+}
+
+bool vehicule::getIsVisible()
+{
+return isVisible;	
 }
 
 
